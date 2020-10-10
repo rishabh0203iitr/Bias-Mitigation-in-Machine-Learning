@@ -18,6 +18,7 @@ def collect_args():
                                  'cifar-s_domain_independent',
                                  'cifar-s_uniconf_adv',
                                  'cifar-s_gradproj_adv',
+                                 'cifar-s_attention'
                                  
                                  # cifar10-s cifar vs imagenet
                                  'cifar-i_baseline', 
@@ -147,6 +148,20 @@ def create_exerpiment_setting(opt):
             'test_color_path': './data/cifar_color_test_imgs',
             'test_gray_path': './data/cifar_gray_test_imgs',
             'test_label_path': './data/cifar_test_labels',
+            'augment': True
+        }
+        opt['data_setting'] = data_setting
+        model = models.cifar_core.CifarModel(opt)
+    
+    elif opt['experiment'] == 'cifar-s_attention':
+        opt['output_dim'] = 1000
+        data_setting = {
+            'train_data_path': './data/cifar-s/p95.0/train_imgs',
+            'train_label_path': './data/cifar_train_labels',
+            'test_color_path': './data/cifar_color_test_imgs',
+            'test_gray_path': './data/cifar_gray_test_imgs',
+            'test_label_path': './data/cifar_test_labels',
+            'domain_label_path': './data/cifar-s/p95.0/train_domain_labels'
             'augment': True
         }
         opt['data_setting'] = data_setting
