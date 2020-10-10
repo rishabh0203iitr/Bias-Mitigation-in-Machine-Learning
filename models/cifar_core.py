@@ -10,6 +10,10 @@ from models import basenet
 from models import dataloader
 import utils
 
+from attention import Feature_extractor
+from attention import Discriminator
+from attention import Classifier
+
 class CifarModel():
     def __init__(self, opt):
         super(CifarModel, self).__init__()
@@ -26,12 +30,13 @@ class CifarModel():
 
     def set_network(self, opt):
         """Define the network"""
-        
-        self.network = basenet.ResNet18(num_classes=opt['output_dim']).to(self.device)
+        self.C=Classifier().to(self.device)
+        self.D=Discriminator().to(self.device)
+        self.F_E=Feature_extractor().to(self.device)
 
-    def forward(self, x):
-        out, feature = self.network(x)
-        return out, feature
+    # def forward(self, x):
+    #     out, feature = self.network(x)
+    #     return out, feature
 
     def set_data(self, opt):
         """Set up the dataloaders"""
@@ -63,8 +68,9 @@ class CifarModel():
             normalize,
         ])
 
-        train_data = dataloader.CifarDataset(data_setting['train_data_path'], 
+        train_data = dataloader.CifarDatasetWithDomain(data_setting['train_data_path'], 
                                              data_setting['train_label_path'],
+                                             data_setting['train_domain_labels']
                                              transform_train)
         test_color_data = dataloader.CifarDataset(data_setting['test_color_path'], 
                                                   data_setting['test_label_path'],
@@ -85,12 +91,18 @@ class CifarModel():
     
     def set_optimizer(self, opt):
         optimizer_setting = opt['optimizer_setting']
-        self.optimizer = optimizer_setting['optimizer']( 
-                            params=self.network.parameters(), 
+        self.optimizer1 = optimizer_setting['optimizer']( 
+                            params=self.D.parameters(), 
                             lr=optimizer_setting['lr'],
                             momentum=optimizer_setting['momentum'],
                             weight_decay=optimizer_setting['weight_decay']
                             )
+        self.optimizer2 = optimizer_setting['optimizer']( 
+                    params=list(F_E.parameters()) + list(C.parameters()), 
+                    lr=optimizer_setting['lr'],
+                    momentum=optimizer_setting['momentum'],
+                    weight_decay=optimizer_setting['weight_decay']
+                    )
         
     def _criterion(self, output, target):
         return F.cross_entropy(output, target)
@@ -119,7 +131,7 @@ class CifarModel():
     def _train(self, loader):
         """Train the model for one epoch"""
         
-        self.network.train()
+        self.F_E.train()
         self.adjust_lr()
         
         train_loss = 0
