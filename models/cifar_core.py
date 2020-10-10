@@ -8,6 +8,7 @@ import torchvision.transforms as transforms
 from tensorboardX import SummaryWriter
 from models import basenet
 from models import dataloader
+from models import attention
 import utils
 
 from attention import Feature_extractor
