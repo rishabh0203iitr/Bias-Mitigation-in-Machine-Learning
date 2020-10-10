@@ -8,7 +8,6 @@ import torchvision.transforms as transforms
 from tensorboardX import SummaryWriter
 from models import basenet
 from models import dataloader
-from models import attention
 import utils
 
 from attention import Feature_extractor
@@ -35,9 +34,9 @@ class CifarModel():
         self.D=Discriminator().to(self.device)
         self.F_E=Feature_extractor().to(self.device)
 
-    # def forward(self, x):
-    #     out, feature = self.network(x)
-    #     return out, feature
+    def forward(self, x):
+        out, feature = self.network(x)
+        return out, feature
 
     def set_data(self, opt):
         """Set up the dataloaders"""
@@ -131,18 +130,31 @@ class CifarModel():
 
     def _train(self, loader):
         """Train the model for one epoch"""
+
+        criterion1 = nn.CrossEntropyLoss()
+        criterion2 = nn.CrossEntropyLoss()
         
         self.F_E.train()
+        self.D.train()
+        self.C.train()
+
         self.adjust_lr()
         
-        train_loss = 0
-        total = 0
+        train_loss_c = 0
+        train_loss_D = 0
+        total_loss_C = 0
         correct = 0
-        for i, (images, targets) in enumerate(loader):
-            images, targets = images.to(self.device), targets.to(self.device)
-            self.optimizer.zero_grad()
-            outputs, _ = self.forward(images)
-            loss = self._criterion(outputs, targets)
+        for i, (images, targets, domain) in enumerate(loader):
+
+            images, targets, domain = images.to(self.device), targets.to(self.device), domain.to(self.device)
+
+            self.optimizer1.zero_grad()
+            self.optimizer2.zero_grad()
+
+            outputs = self.F_E(images)
+            D_outputs = D(outputs )
+
+            loss = self.criterion1(outputs, targets)
             loss.backward()
             self.optimizer.step()
 
