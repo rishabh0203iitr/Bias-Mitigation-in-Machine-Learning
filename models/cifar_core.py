@@ -71,7 +71,7 @@ class CifarModel():
 
         train_data = dataloader.CifarDatasetWithDomain(data_setting['train_data_path'], 
                                              data_setting['train_label_path'],
-                                             data_setting['train_domain_labels']
+                                             data_setting['train_domain_labels'],
                                              transform_train)
         test_color_data = dataloader.CifarDataset(data_setting['test_color_path'], 
                                                   data_setting['test_label_path'],
