@@ -111,14 +111,18 @@ class CifarModel():
         
     def state_dict(self):
         state_dict = {
-            'model': self.network.state_dict(),
+            'F_E': self.F_E.state_dict(),
+            'C': self.C.state_dict(),
+            'D': self.D.state_dict(),
             'optimizer': self.optimizer.state_dict(),
             'epoch': self.epoch
         }  
         return state_dict
     
     def load_state_dict(self, state_dict):
-        self.network.load_state_dict(state_dict['model'])
+        self.F_E.load_state_dict(state_dict['F_E'])
+        self.C.load_state_dict(state_dict['C'])
+        self.D.load_state_dict(state_dict['D'])
         self.optimizer.load_state_dict(state_dict['optimizer'])
         self.epoch = state_dict['epoch']
 
