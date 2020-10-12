@@ -156,7 +156,7 @@ class CifarModel():
             self.optimizer2.zero_grad()
 
             features = self.F_E(images)
-            D_outputs = D(features)
+            D_outputs = self.D(features)
 
             lossD = self.criterion1(D_outputs, domain)
             lossD.backward(retain_graph=True)
@@ -165,8 +165,8 @@ class CifarModel():
             self.optimizer1.zero_grad()
             self.optimizer2.zero_grad()
             
-            feat = F_E(images)
-            C_outputs=C(feat)
+            feat = self.F_E(images)
+            C_outputs=self.C(feat)
             lossC = self.criterion1(C_outputs, targets)
             lossC.backward()
             self.optimizer2.step()
