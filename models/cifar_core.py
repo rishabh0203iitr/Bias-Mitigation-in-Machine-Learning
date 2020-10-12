@@ -35,7 +35,8 @@ class CifarModel():
         self.F_E=Feature_extractor().to(self.device)
 
     def forward(self, x):
-        out, feature = self.network(x)
+        feature = self.F_E(x)
+        out=self.C(feature)
         return out, feature
 
     def set_data(self, opt):
@@ -125,7 +126,9 @@ class CifarModel():
 
     def adjust_lr(self):
         lr = self.init_lr * (0.1 ** (self.epoch // 50))
-        for param_group in self.optimizer.param_groups:
+        for param_group in self.optimizer1.param_groups:
+            param_group['lr'] = lr
+        for param_group in self.optimizer2.param_groups:
             param_group['lr'] = lr
 
     def _train(self, loader):
@@ -151,12 +154,21 @@ class CifarModel():
             self.optimizer1.zero_grad()
             self.optimizer2.zero_grad()
 
-            outputs = self.F_E(images)
-            D_outputs = D(outputs )
+            features = self.F_E(images)
+            D_outputs = D(features)
 
-            loss = self.criterion1(outputs, targets)
-            loss.backward()
-            self.optimizer.step()
+            lossD = self.criterion1(D_outputs, domain)
+            lossD.backward(retain_graph=True)
+            self.optimizer1.step()
+            
+            self.optimizer1.zero_grad()
+            self.optimizer2.zero_grad()
+            
+            feat = F_E(images)
+            C_outputs=C(feat)
+            lossC = self.criterion1(C_outputs, targets)
+            lossC.backward()
+            self.optimizer2.step()
 
             train_loss += loss.item()
             _, predicted = outputs.max(1)
