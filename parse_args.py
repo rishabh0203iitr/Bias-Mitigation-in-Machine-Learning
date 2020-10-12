@@ -18,7 +18,7 @@ def collect_args():
                                  'cifar-s_domain_independent',
                                  'cifar-s_uniconf_adv',
                                  'cifar-s_gradproj_adv',
-                                 'cifar-s_attention'
+                                 'cifar-s_attention',
                                  
                                  # cifar10-s cifar vs imagenet
                                  'cifar-i_baseline', 
