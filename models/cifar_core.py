@@ -100,7 +100,7 @@ class CifarModel():
                             weight_decay=optimizer_setting['weight_decay']
                             )
         self.optimizer2 = optimizer_setting['optimizer']( 
-                    params=list(F_E.parameters()) + list(C.parameters()), 
+                    params=list(self.F_E.parameters()) + list(self.C.parameters()), 
                     lr=optimizer_setting['lr'],
                     momentum=optimizer_setting['momentum'],
                     weight_decay=optimizer_setting['weight_decay']
