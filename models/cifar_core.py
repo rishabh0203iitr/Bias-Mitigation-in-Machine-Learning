@@ -135,8 +135,8 @@ class CifarModel():
     def _train(self, loader):
         """Train the model for one epoch"""
 
-        criterion1 = nn.CrossEntropyLoss()
-        criterion2 = nn.CrossEntropyLoss()
+        self.criterion1 = nn.CrossEntropyLoss()
+        self.criterion2 = nn.CrossEntropyLoss()
         
         self.F_E.train()
         self.D.train()
@@ -146,7 +146,7 @@ class CifarModel():
         
         train_loss_C = 0
         train_loss_D = 0
-        total_loss_C = 0
+        total = 0
         correct = 0
         for i, (images, targets, domain) in enumerate(loader):
 
@@ -180,14 +180,14 @@ class CifarModel():
 
             train_result = {
                 'accuracy': correct*100. / total,
-                'loss': loss.item(),
+                'loss': lossC.item(),
             }
             self.log_result('Train iteration', train_result,
                             len(loader)*self.epoch + i)
 
             if self.print_freq and (i % self.print_freq == 0):
                 print('Training epoch {}: [{}|{}], loss:{}, accuracy:{}'.format(
-                    self.epoch, i+1, len(loader), loss.item(), accuracy
+                    self.epoch, i+1, len(loader), lossC.item(), accuracy
                 ))
 
         self._train_accuracy = accuracy
