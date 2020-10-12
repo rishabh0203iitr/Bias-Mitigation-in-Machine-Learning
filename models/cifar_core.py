@@ -114,7 +114,8 @@ class CifarModel():
             'F_E': self.F_E.state_dict(),
             'C': self.C.state_dict(),
             'D': self.D.state_dict(),
-            'optimizer': self.optimizer.state_dict(),
+            'optimizer1': self.optimizer1.state_dict(),
+            'optimizer2': self.optimizer2.state_dict(),
             'epoch': self.epoch
         }  
         return state_dict
@@ -123,7 +124,10 @@ class CifarModel():
         self.F_E.load_state_dict(state_dict['F_E'])
         self.C.load_state_dict(state_dict['C'])
         self.D.load_state_dict(state_dict['D'])
-        self.optimizer.load_state_dict(state_dict['optimizer'])
+
+        self.optimizer1.load_state_dict(state_dict['optimizer'])
+        self.optimizer2.load_state_dict(state_dict['optimizer'])
+
         self.epoch = state_dict['epoch']
 
     def log_result(self, name, result, step):
