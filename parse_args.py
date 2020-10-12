@@ -161,7 +161,7 @@ def create_exerpiment_setting(opt):
             'test_color_path': './data/cifar_color_test_imgs',
             'test_gray_path': './data/cifar_gray_test_imgs',
             'test_label_path': './data/cifar_test_labels',
-            'domain_label_path': './data/cifar-s/p95.0/train_domain_labels'
+            'domain_label_path': './data/cifar-s/p95.0/train_domain_labels',
             'augment': True
         }
         opt['data_setting'] = data_setting
