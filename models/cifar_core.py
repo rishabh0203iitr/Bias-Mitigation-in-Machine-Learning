@@ -143,7 +143,7 @@ class CifarModel():
 
         self.adjust_lr()
         
-        train_loss_c = 0
+        train_loss_C = 0
         train_loss_D = 0
         total_loss_C = 0
         correct = 0
@@ -169,9 +169,10 @@ class CifarModel():
             lossC = self.criterion1(C_outputs, targets)
             lossC.backward()
             self.optimizer2.step()
+            
 
-            train_loss += loss.item()
-            _, predicted = outputs.max(1)
+            train_loss_C += lossC.item()
+            _, predicted = C_outputs.max(1)
             total += targets.size(0)
             correct += predicted.eq(targets).sum().item()
             accuracy = correct*100. / total
