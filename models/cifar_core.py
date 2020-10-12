@@ -8,11 +8,12 @@ import torchvision.transforms as transforms
 from tensorboardX import SummaryWriter
 from models import basenet
 from models import dataloader
+from models import attention
 import utils
 
-from attention import Feature_extractor
-from attention import Discriminator
-from attention import Classifier
+# from attention import Feature_extractor
+# from attention import Discriminator
+# from attention import Classifier
 
 class CifarModel():
     def __init__(self, opt):
@@ -30,9 +31,9 @@ class CifarModel():
 
     def set_network(self, opt):
         """Define the network"""
-        self.C=Classifier().to(self.device)
-        self.D=Discriminator().to(self.device)
-        self.F_E=Feature_extractor().to(self.device)
+        self.C=attention.Classifier().to(self.device)
+        self.D=attention.Discriminator().to(self.device)
+        self.F_E=attention.Feature_extractor().to(self.device)
 
     def forward(self, x):
         feature = self.F_E(x)
