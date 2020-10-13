@@ -156,6 +156,7 @@ class CifarModel():
         train_loss_D = 0
         total = 0
         correct = 0
+        alpha=1.0
         for i, (images, targets, domain) in enumerate(loader):
 
             images, targets, domain = images.to(self.device), targets.to(self.device), domain.to(self.device)
@@ -175,7 +176,8 @@ class CifarModel():
             
             fea=self.F_E(images)
             log=self.D(fea)
-            log.backward()
+            l,_=torch.max(log, 1)
+            l.backward((torch.ones(l.shape)).to('cuda'))
             gradients = self.D.get_activations_gradient()
             gradients[gradients<0]=-1e12
             gradients=torch.softmax(gradients,1)
