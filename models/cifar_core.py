@@ -173,7 +173,7 @@ class CifarModel():
             self.optimizer1.zero_grad()
             self.optimizer2.zero_grad()
             
-            fea=self.F_E(img)
+            fea=self.F_E(images)
             log=self.D(fea)
             log.backward()
             gradients = self.D.get_activations_gradient()
