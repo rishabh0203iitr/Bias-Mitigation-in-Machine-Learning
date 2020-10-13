@@ -94,10 +94,10 @@ class CifarModel():
     def set_optimizer(self, opt):
         optimizer_setting = opt['optimizer_setting']
         self.optimizer1 = optimizer_setting['optimizer']( 
-                            params=self.D.parameters(), 
-                            lr=optimizer_setting['lr'],
-                            momentum=optimizer_setting['momentum'],
-                            weight_decay=optimizer_setting['weight_decay']
+                            params=list(self.F_E.parameters()) + list(self.D.parameters()), 
+                            lr=5e-4,
+                            momentum=0.9,
+                            weight_decay=0
                             )
         self.optimizer2 = optimizer_setting['optimizer']( 
                     params=list(self.F_E.parameters()) + list(self.C.parameters()), 
@@ -173,8 +173,19 @@ class CifarModel():
             self.optimizer1.zero_grad()
             self.optimizer2.zero_grad()
             
+            fea=self.F_E(img)
+            log=self.D(fea)
+            log.backward()
+            gradients = self.D.get_activations_gradient()
+            gradients[gradients<0]=-1e12
+            gradients=torch.softmax(gradients,1)
+            gradients=(1+alpha*gradients)
+            
+            self.optimizer1.zero_grad()
+            self.optimizer2.zero_grad()
+            
             feat = self.F_E(images)
-            C_outputs=self.C(feat)
+            C_outputs=self.C(feat*gradients)
             lossC = self.criterion1(C_outputs, targets)
             lossC.backward()
             self.optimizer2.step()
