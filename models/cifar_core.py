@@ -177,7 +177,7 @@ class CifarModel():
             fea=self.F_E(images)
             log=self.D(fea)
             l,_=torch.max(log, 1)
-            l.backward((torch.ones(l.shape)).to('cuda'))
+            l.backward((torch.ones(l.shape[0])).to('cuda'))
             gradients = self.D.get_activations_gradient()
             gradients[gradients<0]=-1e12
             gradients=torch.softmax(gradients,1)
