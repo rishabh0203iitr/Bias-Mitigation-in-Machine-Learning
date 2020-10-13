@@ -204,7 +204,9 @@ class CifarModel():
     def _test(self, loader):
         """Test the model performance"""
         
-        self.network.eval()
+        self.F_E.eval()
+        self.D.eval()
+        self.C.eval()
 
         total = 0
         correct = 0
