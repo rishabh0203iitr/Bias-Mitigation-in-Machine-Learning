@@ -95,7 +95,7 @@ class CifarModel():
         optimizer_setting = opt['optimizer_setting']
         self.optimizer1 = optimizer_setting['optimizer']( 
                             params=list(self.F_E.parameters()) + list(self.D.parameters()), 
-                            lr=5e-4,
+                            lr=1e-4,
                             momentum=0.9,
                             weight_decay=0
                             )
@@ -135,8 +135,6 @@ class CifarModel():
 
     def adjust_lr(self):
         lr = self.init_lr * (0.1 ** (self.epoch // 50))
-        for param_group in self.optimizer1.param_groups:
-            param_group['lr'] = lr
         for param_group in self.optimizer2.param_groups:
             param_group['lr'] = lr
 
@@ -177,7 +175,7 @@ class CifarModel():
             fea=self.F_E(images)
             log=self.D(fea)
             l,_=torch.max(log, 1)
-            l.backward((torch.ones(l.shape[0])).to('cuda'))
+            l.backward((torch.ones(l.shape)).to('cuda'))
             gradients = self.D.get_activations_gradient()
             gradients[gradients<0]=-1e12
             gradients=torch.softmax(gradients,1)
