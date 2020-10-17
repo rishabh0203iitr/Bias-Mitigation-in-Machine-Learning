@@ -70,7 +70,7 @@ def create_exerpiment_setting(opt):
         opt['device'] = torch.device('cuda' if opt['cuda'] else 'cpu')
         opt['print_freq'] = 50
         opt['batch_size'] = 128
-        opt['total_epochs'] = 1
+        opt['total_epochs'] = 200
         opt['save_folder'] = os.path.join('record/'+opt['experiment'], 
                                           opt['experiment_name'])
         utils.creat_folder(opt['save_folder'])
