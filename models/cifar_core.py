@@ -256,13 +256,33 @@ class CifarModel():
         # Test and save the result
         test_color_result = self._test(self.test_color_loader)
         test_gray_result = self._test(self.test_gray_loader)
+        
+#         import pickle
+#         import numpy as np
+#         test_color='/content/drive/My Drive/drip_copy/fair_lamda_5_exp3/record/cifar-s_attention/attention_1/test_color_result.pkl'
+#         test_gray='/content/drive/My Drive/drip_copy/fair_lamda_5_exp3/record/cifar-s_attention/attention_1/test_gray_result.pkl'
+        
+#         bias=0
+#         with open(test_color, 'rb') as f:
+#               test_color_result = pickle.load(f)
+#         with open(test_gray, 'rb') as f:
+#               test_gray_result = pickle.load(f)
+
+        for i in range(10):
+          Gr=(np.array(test_gray_result['predict_labels'])==i).sum()
+          Col=(np.array(test_color_result['predict_labels'])==i).sum()
+          bias=bias+((max(Gr,Col)/(Gr+Col))-0.5)
+        bias=bias/10
+        
+        
         utils.save_pkl(test_color_result, os.path.join(self.save_path, 'test_color_result.pkl'))
         utils.save_pkl(test_gray_result, os.path.join(self.save_path, 'test_gray_result.pkl'))
         
         # Output the classification accuracy on test set
         info = ('Test on color images accuracy: {}\n' 
-                'Test on gray images accuracy: {}'.format(test_color_result['accuracy'],
-                                                          test_gray_result['accuracy']))
+                'Test on gray images accuracy: {}\n'
+                'bias: {}'.format(test_color_result['accuracy'],
+                                                          test_gray_result['accuracy'], bias))
         utils.write_info(os.path.join(self.save_path, 'test_result.txt'), info)
         
     
