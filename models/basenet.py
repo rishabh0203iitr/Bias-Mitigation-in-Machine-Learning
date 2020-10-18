@@ -120,7 +120,7 @@ class ResNet_base(nn.Module):
         return out
     
 def ResNet18(num_classes=10):
-    return ResNet(BasicBlock, [2,2,2,2], num_classes=num_classes)
+    return ResNet(BasicBlock, [2,2,2,2])
 
 def ResNet18_base():
     """ResNet18 but without the final fc layer"""
