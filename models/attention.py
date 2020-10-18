@@ -63,7 +63,7 @@ class Classifier(nn.Module):
   def __init__(self):
     super().__init__()
     self.fc1=nn.Linear(in_features=1000, out_features=100)
-    self.out=nn.Linear(in_features=100, out_features=10)
+    self.out=nn.Linear(in_features=100, out_features=20)
   def forward(self, t):
 
     t=self.fc1(t)
