@@ -5,7 +5,7 @@ import numpy as np
 from torch.autograd import Function
 from models import basenet
 
-beta=1.0
+beta=0.5
 class RevGrad(Function):
     @staticmethod
     def forward(ctx, input_):
