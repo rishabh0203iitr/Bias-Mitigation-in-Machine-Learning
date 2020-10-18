@@ -125,8 +125,8 @@ class CifarModel():
         self.C.load_state_dict(state_dict['C'])
         self.D.load_state_dict(state_dict['D'])
 
-        self.optimizer1.load_state_dict(state_dict['optimizer'])
-        self.optimizer2.load_state_dict(state_dict['optimizer'])
+        self.optimizer1.load_state_dict(state_dict['optimizer1'])
+        self.optimizer2.load_state_dict(state_dict['optimizer2'])
 
         self.epoch = state_dict['epoch']
 
