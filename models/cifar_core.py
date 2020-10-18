@@ -154,7 +154,7 @@ class CifarModel():
         train_loss_D = 0
         total = 0
         correct = 0
-        alpha=1.0
+        alpha=20.0
         for i, (images, targets, domain) in enumerate(loader):
 
             images, targets, domain = images.to(self.device), targets.to(self.device), domain.to(self.device)
