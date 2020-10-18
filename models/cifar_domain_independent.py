@@ -25,7 +25,9 @@ class CifarDomainIndependent(CifarModel):
     def _test(self, loader, test_on_color=True):
         """Test the model performance"""
         
-        self.network.eval()
+        self.F_E.eval()
+        self.D.eval()
+        self.C.eval()
 
         total = 0
         correct = 0
