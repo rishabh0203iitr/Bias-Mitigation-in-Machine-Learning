@@ -1,0 +1,1 @@
+!python main.py --experiment cifar-s_domain_independent --experiment_name domain_independent_attention --random_seed 1
