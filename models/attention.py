@@ -24,9 +24,9 @@ class RevGrad(Function):
 class Feature_extractor(nn.Module):
   def __init__(self):
     super().__init__()
-    self.resnet = basenet.ResNet18(num_classes=1000)
+    self.resnet = basenet.ResNet18()
   def forward(self, t):
-    t,_=self.resnet(t)
+    t=self.resnet(t)
 
     return t
 
@@ -34,8 +34,8 @@ class Feature_extractor(nn.Module):
 class Discriminator(nn.Module):
   def __init__(self):
     super().__init__()
-    self.fc1=nn.Linear(in_features=1000, out_features=100)
-    self.out=nn.Linear(in_features=100, out_features=2)
+    self.fc1=nn.Linear(in_features=1000, out_features=2)
+#     self.out=nn.Linear(in_features=100, out_features=2)
     # placeholder for the gradients
     self.gradients = None
   
@@ -47,9 +47,9 @@ class Discriminator(nn.Module):
     h = t.register_hook(self.activations_hook)
     t=RevGrad.apply(t)
     t=self.fc1(t)
-    t=F.relu(t, inplace=False)
+#     t=F.relu(t, inplace=False)
 
-    t=self.out(t)
+#     t=self.out(t)
     return t
 
   def get_activations_gradient(self):
@@ -62,11 +62,11 @@ class Discriminator(nn.Module):
 class Classifier(nn.Module):
   def __init__(self):
     super().__init__()
-    self.fc1=nn.Linear(in_features=1000, out_features=100)
-    self.out=nn.Linear(in_features=100, out_features=20)
+    self.fc1=nn.Linear(in_features=1000, out_features=20)
+#     self.out=nn.Linear(in_features=100, out_features=20)
   def forward(self, t):
 
     t=self.fc1(t)
-    t=F.relu(t)
-    t=self.out(t)
+#     t=F.relu(t)
+#     t=self.out(t)
     return t
